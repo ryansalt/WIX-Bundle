@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/Bootstrapper/v15
+/Bootstrapper/obj/Debug
+/SetupProject1/bin/Debug
+/SetupProject1/obj/Debug
+/SetupProject2/bin/Debug
+/SetupProject2/obj/Debug
