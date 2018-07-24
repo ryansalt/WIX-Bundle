@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  
      <Bundle Name="!(loc.BundleName)" Version="1.0.0.0" 
           Manufacturer="!(loc.Manufacturer)" 
           HelpTelephone="!(loc.HelpPhone)"         
@@ -9,11 +12,62 @@
           UpgradeCode="c4858e43-3e12-4e25-9ec9-d7b393705a16">
 		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
 
+    <util:RegistrySearch Root="HKLM" 
+                         Key="SOFTWARE\Microsoft\ASP.NET Core\Runtime Package Store\v2.0" 
+                         Result="exists"
+                         Variable="NetCore2_x64_Installed"
+                         Win64="yes"
+                         />
+
+    <util:RegistrySearch Root="HKLM" 
+                         Key="SOFTWARE\Microsoft\ASP.NET Core\Runtime Package Store\v2.0" 
+                         Result="exists"
+                         Variable="NetCore2_x86_Installed" 
+                         />
+       
 		<Chain>
-      <MsiPackage Id="SetupProject1" SourceFile="$(var.SetupProject1.TargetPath)" Visible="yes">
+      <PackageGroupRef Id='NetCore2_X64' />
+      <PackageGroupRef Id='NetCore2_X86' />
+      <RollbackBoundary />
+      <MsiPackage Id="SetupProject1" 
+                  SourceFile="$(var.SetupProject1.TargetPath)" 
+                  Visible="yes">
       </MsiPackage>
-      <MsiPackage Id="SetupProject2" SourceFile="$(var.SetupProject2.TargetPath)" Visible="yes">
+      <MsiPackage Id="SetupProject2" 
+                  SourceFile="$(var.SetupProject2.TargetPath)" 
+                  Visible="yes">
       </MsiPackage>
 		</Chain>
 	</Bundle>
+
+  <Fragment>
+    <!-- .Net core -->
+    <PackageGroup Id="NetCore2_X64">
+      <ExePackage Id="NetCore2_X64" 
+                  Cache="yes" 
+                  Compressed="yes" 
+                  PerMachine="yes" 
+                  Permanent="yes" 
+                  Vital="yes"
+                  InstallCondition="VersionNT64"
+                  InstallCommand="/s"
+                  UninstallCommand="/s /uninstall"
+                  SourceFile="$(var.SolutionDir)Publish\DotNet\dotnet-runtime-2.1.0-preview1-26216-03-win-x64.exe"
+                  DetectCondition="NetCore2_x64_Installed"  />
+    </PackageGroup>
+
+    <PackageGroup Id="NetCore2_X86">
+      <ExePackage Id="NetCore2_X86" 
+                  Cache="yes" 
+                  Compressed="yes" 
+                  PerMachine="yes" 
+                  Permanent="yes" 
+                  Vital="yes"
+                  InstallCondition="NOT VersionNT64"
+                  InstallCommand="/s"
+                  UninstallCommand="/s /uninstall"
+                  SourceFile="$(var.SolutionDir)Publish\DotNet\dotnet-runtime-2.1.0-preview1-26216-03-win-x86.exe"
+                  DetectCondition="NetCore2_x86_Installed" />
+    </PackageGroup>
+  </Fragment>
 </Wix>
