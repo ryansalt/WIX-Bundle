@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="Manufacturer">Company name</String>
+  <String Id="BundleName">Bootstrapper Example</String>
+  <String Id="HelpPhone">112</String>
+  <String Id="HelpUrl">www.mysite.com/help</String>
+  <String Id="UpdateUrl">www.mysite.com/update</String>
+  <String Id="AboutUrl">www.mysite.com/about</String>
+</WixLocalization>
+

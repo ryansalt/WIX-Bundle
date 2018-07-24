@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+     <Bundle Name="!(loc.BundleName)" Version="1.0.0.0" 
+          Manufacturer="!(loc.Manufacturer)" 
+          HelpTelephone="!(loc.HelpPhone)"         
+          HelpUrl="!(loc.HelpUrl)"         
+          UpdateUrl="!(loc.UpdateUrl)"        
+          AboutUrl="!(loc.AboutUrl)"
+          UpgradeCode="c4858e43-3e12-4e25-9ec9-d7b393705a16">
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+
+		<Chain>
+      <MsiPackage Id="SetupProject1" SourceFile="$(var.SetupProject1.TargetPath)" Visible="yes">
+      </MsiPackage>
+      <MsiPackage Id="SetupProject2" SourceFile="$(var.SetupProject2.TargetPath)" Visible="yes">
+      </MsiPackage>
+		</Chain>
+	</Bundle>
+</Wix>
