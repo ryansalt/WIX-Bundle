@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:vm="clr-namespace:InstallerUI.View"
              mc:Ignorable="d" 
-             Title="StatSports Team Installer" Width="500" MinWidth="400" Height="545" MinHeight="300" ResizeMode="NoResize" WindowStyle="None" Background="Transparent" AllowsTransparency="True">
+             Title="StatSports Team Installer" Width="800" Height="700" ResizeMode="NoResize" WindowStyle="None" Background="Transparent" AllowsTransparency="True">
 
     <Window.Resources>
         <Style TargetType="Button">
@@ -166,8 +166,10 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-
-                <Image Margin="0,-6,0,-102" Source="..\Assets\Pods.png" Stretch="Fill" Height="200" VerticalAlignment="Top"/>
+                <Border Background="#f0f0f0" CornerRadius="10,10,0,0" Height="50px" VerticalAlignment="Top" Padding="0" Margin="0,0,0,0">
+                    <Image Source="..\Assets\logo_assist.png" HorizontalAlignment="Left" Width="80px" Margin="30,0,0,0"  />
+                </Border>
+                <Image Margin="39,83,441,-163" Source="..\Assets\software_box.png" Stretch="Fill" Height="300px" Width="300px" VerticalAlignment="Top"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 0, 15, 0" VerticalAlignment="Top">
                     <Button Name="MinimizeButton" Margin="5,5,5,70" Click="MinimizeButton_Click">
@@ -176,7 +178,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Width="10" Height="10" Name="Button1_Image" Source="..\Assets\horizontal-line-remove-button.png"/>
+                        <Image Width="20" Height="20" Name="Button1_Image" Source="..\Assets\min@2x.png" Margin="0,10,10,0"/>
                     </Button>
                     <Button Name="CloseButton" Margin="5,5,5,70" Click="CloseButton_Click">
                         <Button.Template>
@@ -184,57 +186,37 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Width="10" Height="10" Name="Button3_Image" Source="..\Assets\close-button.png"/>
+                        <Image Width="20" Height="20" Name="Button3_Image" Source="..\Assets\close@2x.png" RenderTransformOrigin="0.598,0.708" Margin="0,10,0,0"/>
                     </Button>
                 </StackPanel>
 
                 <Grid Name="InstallerGrid">
-                    <Image Source="..\Assets\StatsportsLogo.png" Margin = "168,213,168,-161" />
-                    <TextBlock FontSize="40" HorizontalAlignment="Center"  Margin="0,258,0,-222" Width="251" >Team Installer</TextBlock>
 
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,318,0,-253" HorizontalAlignment="center">
+                    <TextBlock FontSize="25" HorizontalAlignment="Center"  Margin="378,136,10,41" Width="392" Text="We are installing the software" />
+
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,318,0,-253" HorizontalAlignment="center">
                         <TextBlock HorizontalAlignment="Center" Text="{Binding CurrentPackage, Mode=OneWay}"  />
                     </StackPanel>
 
-
-                    <ProgressBar Style="{StaticResource ProgressBar}" Grid.Row="2" Value="{Binding Path=LocalProgress, Mode=OneWay}" Minimum="0" Maximum="100" VerticalAlignment="Bottom" Margin="47,0,47,-278"/>
+                    <StackPanel Grid.Row="3" Margin="0,350,0,0" Width="600px">
+                        <ProgressBar Style="{StaticResource ProgressBar}" Value="{Binding Path=LocalProgress, Mode=OneWay}" Minimum="0" Maximum="100" VerticalAlignment="Bottom"/>
+                    </StackPanel>
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,374,0,-305" HorizontalAlignment="center">
                         <TextBlock HorizontalAlignment="Center" Text="{Binding Progress, Mode=OneWay}"></TextBlock>
                     </StackPanel>
 
-                    <ProgressBar Style="{StaticResource ProgressBar}" Grid.Row="2" Value="{Binding Path=GlobalProgress, Mode=OneWay}" Minimum="0" Maximum="100" Margin="47,401,47,-330" />
 
-                    <StackPanel Orientation="Horizontal" Width="480" Height="auto" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="10,10,10,-365" Grid.Row="2" Visibility="{Binding LicenseVisible, Mode=OneWay, FallbackValue=Visible}"  >
-
-                        <CheckBox
-                       Name="LicenseAgreementCheckBox"
-                       Content="Click here to indicate that you have read and agree to the terms presented in the"
-                       HorizontalAlignment="Left"
-                       Margin="10,10,0,0"
-                       VerticalAlignment="Top"
-                       Checked="LicenseAgreement_Checked"    
-                       Unchecked="LicenseAgreement_UnChecked"
-                        >
-
-                        </CheckBox>
+                    <ProgressBar Style="{StaticResource ProgressBar}" Value="{Binding Path=GlobalProgress, Mode=OneWay}" Minimum="0" Maximum="100" Margin="47,401,47,-84" />
 
 
-                    </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Width="480" Height="auto" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="10,10,10,-380" Grid.Row="2" Visibility="{Binding LicenseVisible, Mode=OneWay, FallbackValue=Visible}" >
-                        <TextBlock Margin="30,0,0,0">           
-                        <Hyperlink Click="Hyperlink_OpenAgreement">
-                            End User License Agreement
-                        </Hyperlink>
-                        </TextBlock>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="110,0,108,-435" Grid.Row="2">
-                        <Button Style="{DynamicResource BtnDefault}" Name="BtnInstall" Content="Install" Command="{Binding Path=InstallCommand, Mode=OneTime}" IsEnabled="False" Margin="10" Height="25" Width="70"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="110,0,108,-135" Grid.Row="2">
+                        <Button Style="{DynamicResource BtnDefault}" Name="BtnInstall" Content="Install" Command="{Binding Path=InstallCommand, Mode=OneTime}" IsEnabled="True" Margin="10" Height="25" Width="70"/>
                         <Button Style="{DynamicResource BtnDefault}" Name ="BtnUninstall" Content="Uninstall" Command="{Binding Path=UninstallCommand, Mode=OneTime}" Margin="10" Height="25" Width="70"/>
                         <Button Style="{DynamicResource BtnDefault}" Name="BtnCancel" Content="Cancel" Command="{Binding Path=CancelCommand, Mode=OneTime}" Margin="10" Height="25" Width="70" />
                     </StackPanel>
+                    <TextBlock FontSize="15" HorizontalAlignment="Center"  Margin="378,192,10,41" Width="392" ><Run Text="This is an installer demo base on WiX, WPF, Prism and MEF"/><Run Text="."/><LineBreak/><Run Text="The Burn custom installer will add:"/><LineBreak/><Run/><LineBreak/><Run/><LineBreak/><Run/></TextBlock>
                 </Grid>
 
             </Grid>

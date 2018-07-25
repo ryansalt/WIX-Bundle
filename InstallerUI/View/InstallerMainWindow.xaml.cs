@@ -32,7 +32,7 @@ namespace InstallerUI.View
         public InstallerMainWindow(InstallerMainWindowViewModel viewModel, Engine engine)
         {
             DataContext = viewModel;
- 
+
             Loaded += (sender, e) => engine.CloseSplashScreen();
             Closed += (sender, e) => Dispatcher.InvokeShutdown(); // shutdown dispatcher when the window is closed.
             MouseLeftButtonDown += (sender, e) => DragMove();
@@ -50,63 +50,6 @@ namespace InstallerUI.View
             WindowState = WindowState.Minimized;
         }
 
-        private void Hyperlink_OpenAgreement(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                //string fileName = Path.GetTempPath() + "License.pdf";
-                //Process process = new Process();
-                //process.StartInfo.FileName = fileName;
-                //process.Start();
-            }
-            catch
-            {
 
-            }
-        }
-
-        private void LicenseAgreement_Checked(object sender, RoutedEventArgs e)
-        {
-            BtnInstall.IsEnabled = true;
-            // LicenseAgreementCheckBox.IsEnabled = false;
-        }
-
-        private void LicenseAgreement_UnChecked(object sender, RoutedEventArgs e)
-        {
-            BtnInstall.IsEnabled = false;
-        }
-
-        private void BtnAutentication_Click(object sender, RoutedEventArgs e)
-        {
-            //ValidateUserAndTokenAsync();
-        }
-
-        private void EnterClicked(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-                //ValidateUserAndTokenAsync();
-                e.Handled = true;
-            }
-        }
-
-        //private async void ValidateUserAndTokenAsync()
-        //{
-        //    string userName = User.Text;
-        //    string userPass = Password.Password.ToString();
-        //    var databaseConfig = await AuthService.AuthenticateUser(userName, userPass);
-        //    if (databaseConfig != null)
-        //    {
-        //        AuthenticationGrid.Visibility = Visibility.Collapsed;
-        //        InstallerGrid.Visibility = Visibility.Visible;
-        //        //_viewModel.DatabaseConfig = databaseConfig;
-        //    }
-        //    else
-        //    {
-        //        LabelAuthError.Visibility = Visibility.Visible;
-        //        User.Text = string.Empty;
-        //        Password.Clear();
-        //    }
-        //}
     }
 }
