@@ -14,8 +14,9 @@
        <BootstrapperApplicationRef Id="ManagedBootstrapperApplicationHost">
          <Payload Name="BootstrapperCore.config" SourceFile="$(var.InstallerUI.TargetDir)InstallerUI.BootstrapperCore.config" />
          <Payload SourceFile="$(var.InstallerUI.TargetPath)" />
-         <Payload SourceFile="$(var.InstallerUI.TargetDir)PrismMVVMLibrary.dll" />
-         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.dll" />
+         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Mvvm.dll" />
+         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Mvvm.Desktop.dll" />
+         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.SharedInterfaces.dll" />
          <Payload SourceFile="$(var.InstallerUI.TargetDir)Newtonsoft.Json.dll" />
          <!--<PayloadGroupRef Id="LicensePayload"/>-->
        </BootstrapperApplicationRef>

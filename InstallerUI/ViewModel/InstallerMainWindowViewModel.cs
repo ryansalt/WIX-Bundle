@@ -2,11 +2,12 @@
 using InstallerUI.Data;
 using InstallerUI.Interfaces;
 using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Newtonsoft.Json;
-using PrismMVVMLibrary;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace InstallerUI.ViewModel
 {
     [Export]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class InstallerMainWindowViewModel : ViewModelBase
+    public class InstallerMainWindowViewModel : BindableBase
     {
         private BootstrapperApplication bootstrapper;
         private Engine engine;
@@ -43,7 +44,7 @@ namespace InstallerUI.ViewModel
             get => StateValue;
             set
             {
-                StateValue = State;
+                SetProperty(ref StateValue, value);
                 InstallCommandValue.RaiseCanExecuteChanged();
                 UninstallCommandValue.RaiseCanExecuteChanged();
             }
@@ -53,35 +54,35 @@ namespace InstallerUI.ViewModel
         public bool Downgrade
         {
             get => DowngradeValue;
-            set => DowngradeValue = Downgrade;
+            set => SetProperty(ref DowngradeValue, value);
         }
 
         private int LocalProgressValue;
         public int LocalProgress
         {
             get => LocalProgressValue;
-            set => LocalProgressValue = LocalProgress;
+            set => SetProperty(ref LocalProgressValue, value);
         }
 
         private int GlobalProgressValue;
         public int GlobalProgress
         {
             get => GlobalProgressValue;
-            set => GlobalProgressValue = GlobalProgress;
+            set => SetProperty(ref GlobalProgressValue, value);
         }
 
         private string ProgressValue;
         public string Progress
         {
             get => ProgressValue;
-            set => ProgressValue = Progress;
+            set => SetProperty(ref ProgressValue, value);
         }
 
         private string CurrentPackageValue;
         public string CurrentPackage
         {
             get => CurrentPackageValue;
-            set => CurrentPackageValue = CurrentPackage;
+            set => SetProperty(ref CurrentPackageValue, value);
         }
 
         private bool InstallingValue;
@@ -90,7 +91,7 @@ namespace InstallerUI.ViewModel
             get => InstallingValue;
             set
             {
-                InstallingValue = Installing;
+                SetProperty(ref InstallingValue, value);
                 InstallCommandValue.RaiseCanExecuteChanged();
                 UninstallCommandValue.RaiseCanExecuteChanged();
             }
@@ -102,7 +103,7 @@ namespace InstallerUI.ViewModel
             get => isCancelledValue;
             set
             {
-                isCancelledValue = IsCancelled;
+                SetProperty(ref isCancelledValue, value);
             }
         }
 
@@ -110,7 +111,7 @@ namespace InstallerUI.ViewModel
         public Visibility AuthenticationGridVisible
         {
             get => AuthenticationGridVisibility;
-            set => AuthenticationGridVisibility = AuthenticationGridVisible;
+            set => SetProperty(ref this.AuthenticationGridVisibility, value);
 
         }
 
@@ -118,15 +119,17 @@ namespace InstallerUI.ViewModel
         public Visibility InstallerGridVisible
         {
             get => InstallerGridVisibility;
-            set => InstallerGridVisibility = InstallerGridVisible;
+            set => SetProperty(ref this.InstallerGridVisibility, value);
         }
 
         private Visibility LicenseVisibility;
         public Visibility LicenseVisible
         {
             get => LicenseVisibility;
-            set => LicenseVisibility = LicenseVisible;
+            set => SetProperty(ref this.LicenseVisibility, value);
         }
+
+        
         #endregion
 
         [ImportingConstructor]
@@ -308,9 +311,6 @@ namespace InstallerUI.ViewModel
 
             if (LaunchAction.Uninstall == bootstrapper.Command.Action)
             {
-                AuthenticationGridVisible = Visibility.Collapsed;
-                InstallerGridVisible = Visibility.Visible;
-                LicenseVisible = Visibility.Hidden;
                 engine.Log(LogLevel.Verbose, "Invoking automatic plan for uninstall");
                 engine.Plan(LaunchAction.Uninstall);
             }

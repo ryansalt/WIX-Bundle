@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:vm="clr-namespace:InstallerUI.View"
              mc:Ignorable="d" 
-             Title="StatSports Team Installer" Width="800" Height="700" ResizeMode="NoResize" WindowStyle="None" Background="Transparent" AllowsTransparency="True">
+             Title="StatSports Team Installer" Width="800" Height="600" ResizeMode="NoResize" WindowStyle="None" Background="Transparent" AllowsTransparency="True">
 
     <Window.Resources>
         <Style TargetType="Button">
