@@ -16,8 +16,6 @@
          <Payload SourceFile="$(var.InstallerUI.TargetPath)" />
          <Payload SourceFile="$(var.InstallerUI.TargetDir)PrismMVVMLibrary.dll" />
          <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.dll" />
-         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Interactivity.dll" />
-         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.UnityExtensions.dll" />
          <Payload SourceFile="$(var.InstallerUI.TargetDir)Newtonsoft.Json.dll" />
          <!--<PayloadGroupRef Id="LicensePayload"/>-->
        </BootstrapperApplicationRef>
