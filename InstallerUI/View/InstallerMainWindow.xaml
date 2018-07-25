@@ -1,0 +1,243 @@
+﻿<Window x:Class="InstallerUI.View.InstallerMainWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:vm="clr-namespace:InstallerUI.View"
+             mc:Ignorable="d" 
+             Title="StatSports Team Installer" Width="500" MinWidth="400" Height="545" MinHeight="300" ResizeMode="NoResize" WindowStyle="None" Background="Transparent" AllowsTransparency="True">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="H1">
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="Margin" Value="5,15,5,0" />
+        </Style>
+        <Style TargetType="ProgressBar">
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style x:Key="BtnDefault" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="Border" CornerRadius="4,4,4,4" BorderThickness="0" Background="#eff4f8" BorderBrush="Black">
+                            <ContentPresenter Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="#303135" />
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="#303135" />
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="#303135" />
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#949496"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ProgressBar" TargetType="ProgressBar">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Border BorderBrush="#BBC6C4" BorderThickness="0" CornerRadius="4" Padding="1" Height="20" Background="#eff4f8">
+                            <Grid x:Name="PART_Track" >
+                                <Rectangle x:Name="PART_Indicator" HorizontalAlignment="Left" RadiusX="5" RadiusY="5" >
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+                                            <GradientStop Color="#9df4fe" Offset="0" />
+                                            <GradientStop Color="#5db8ef" Offset="1.0" />
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
+        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type PasswordBox}">
+            <Setter Property="PasswordChar" Value="●"/>
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type PasswordBox}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border CornerRadius="10" Background="Transparent">
+        <Border Margin="10" Background="#FFFFFF" CornerRadius="10">
+            <Border.Effect>
+                <DropShadowEffect Direction="270" ShadowDepth="4" BlurRadius="10" Opacity="0.5"/>
+            </Border.Effect>
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+
+                <Image Margin="0,-6,0,-102" Source="..\Assets\Pods.png" Stretch="Fill" Height="200" VerticalAlignment="Top"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 0, 15, 0" VerticalAlignment="Top">
+                    <Button Name="MinimizeButton" Margin="5,5,5,70" Click="MinimizeButton_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Image Width="10" Height="10" Name="Button1_Image" Source="..\Assets\horizontal-line-remove-button.png"/>
+                    </Button>
+                    <Button Name="CloseButton" Margin="5,5,5,70" Click="CloseButton_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Image Width="10" Height="10" Name="Button3_Image" Source="..\Assets\close-button.png"/>
+                    </Button>
+                </StackPanel>
+
+                <Grid Name="InstallerGrid">
+                    <Image Source="..\Assets\StatsportsLogo.png" Margin = "168,213,168,-161" />
+                    <TextBlock FontSize="40" HorizontalAlignment="Center"  Margin="0,258,0,-222" Width="251" >Team Installer</TextBlock>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,318,0,-253" HorizontalAlignment="center">
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding CurrentPackage, Mode=OneWay}"  />
+                    </StackPanel>
+
+
+                    <ProgressBar Style="{StaticResource ProgressBar}" Grid.Row="2" Value="{Binding Path=LocalProgress, Mode=OneWay}" Minimum="0" Maximum="100" VerticalAlignment="Bottom" Margin="47,0,47,-278"/>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,374,0,-305" HorizontalAlignment="center">
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding Progress, Mode=OneWay}"></TextBlock>
+                    </StackPanel>
+
+                    <ProgressBar Style="{StaticResource ProgressBar}" Grid.Row="2" Value="{Binding Path=GlobalProgress, Mode=OneWay}" Minimum="0" Maximum="100" Margin="47,401,47,-330" />
+
+                    <StackPanel Orientation="Horizontal" Width="480" Height="auto" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="10,10,10,-365" Grid.Row="2" Visibility="{Binding LicenseVisible, Mode=OneWay, FallbackValue=Visible}"  >
+
+                        <CheckBox
+                       Name="LicenseAgreementCheckBox"
+                       Content="Click here to indicate that you have read and agree to the terms presented in the"
+                       HorizontalAlignment="Left"
+                       Margin="10,10,0,0"
+                       VerticalAlignment="Top"
+                       Checked="LicenseAgreement_Checked"    
+                       Unchecked="LicenseAgreement_UnChecked"
+                        >
+
+                        </CheckBox>
+
+
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Width="480" Height="auto" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="10,10,10,-380" Grid.Row="2" Visibility="{Binding LicenseVisible, Mode=OneWay, FallbackValue=Visible}" >
+                        <TextBlock Margin="30,0,0,0">           
+                        <Hyperlink Click="Hyperlink_OpenAgreement">
+                            End User License Agreement
+                        </Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="110,0,108,-435" Grid.Row="2">
+                        <Button Style="{DynamicResource BtnDefault}" Name="BtnInstall" Content="Install" Command="{Binding Path=InstallCommand, Mode=OneTime}" IsEnabled="False" Margin="10" Height="25" Width="70"/>
+                        <Button Style="{DynamicResource BtnDefault}" Name ="BtnUninstall" Content="Uninstall" Command="{Binding Path=UninstallCommand, Mode=OneTime}" Margin="10" Height="25" Width="70"/>
+                        <Button Style="{DynamicResource BtnDefault}" Name="BtnCancel" Content="Cancel" Command="{Binding Path=CancelCommand, Mode=OneTime}" Margin="10" Height="25" Width="70" />
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+        </Border>
+    </Border>
+</Window>

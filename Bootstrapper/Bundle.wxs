@@ -10,8 +10,21 @@
           UpdateUrl="!(loc.UpdateUrl)"        
           AboutUrl="!(loc.AboutUrl)"
           UpgradeCode="c4858e43-3e12-4e25-9ec9-d7b393705a16">
-		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+		<!--<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />-->
+       <BootstrapperApplicationRef Id="ManagedBootstrapperApplicationHost">
+         <Payload Name="BootstrapperCore.config" SourceFile="$(var.InstallerUI.TargetDir)InstallerUI.BootstrapperCore.config" />
+         <Payload SourceFile="$(var.InstallerUI.TargetPath)" />
+         <Payload SourceFile="$(var.InstallerUI.TargetDir)PrismMVVMLibrary.dll" />
+         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.dll" />
+         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Interactivity.dll" />
+         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.UnityExtensions.dll" />
+         <Payload SourceFile="$(var.InstallerUI.TargetDir)Newtonsoft.Json.dll" />
+         <!--<PayloadGroupRef Id="LicensePayload"/>-->
+       </BootstrapperApplicationRef>
 
+       <WixVariable Id="WixMbaPrereqLicenseUrl" Value="" />
+       <WixVariable Id="WixMbaPrereqPackageId" Value="" />
+       
     <util:RegistrySearch Root="HKLM" 
                          Key="SOFTWARE\Microsoft\ASP.NET Core\Runtime Package Store\v2.0" 
                          Result="exists"
