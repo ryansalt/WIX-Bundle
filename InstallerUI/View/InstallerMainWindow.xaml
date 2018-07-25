@@ -201,7 +201,7 @@
 
                 <Grid Name="InstallerGrid">
 
-                    <TextBlock FontSize="20" HorizontalAlignment="Center"  Margin="378,136,10,402" Width="392" Text="We are installing the software" />
+                    <TextBlock FontSize="20" HorizontalAlignment="Center"  Margin="378,136,10,402" Width="392" Text="{Binding CurrentAction, Mode=OneWay}" />
 
                     <StackPanel Grid.Row="3" Margin="0,230,0,0" Height="30" >
                         <TextBlock HorizontalAlignment="Center" Foreground="Gray" Text="{Binding CurrentPackage, Mode=OneWay}"  />

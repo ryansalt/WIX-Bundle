@@ -107,6 +107,16 @@ namespace InstallerUI.ViewModel
             }
         }
 
+        private string CurrentActionValue;
+        public string CurrentAction
+        {
+            get => CurrentActionValue;
+            set
+            {
+                SetProperty(ref CurrentActionValue, value);
+            }
+        }
+
         private Visibility AuthenticationGridVisibility;
         public Visibility AuthenticationGridVisible
         {
@@ -154,7 +164,7 @@ namespace InstallerUI.ViewModel
             bootstrapper.DetectBegin += (_, ea) =>
             {
                 LogEvent("DetectBegin", ea);
-
+                CurrentAction = ea.Installed ? "Preparing for software uninstall" : "Preparing for software install";
                 //Write the temporary license file after it was read from embedded file
                 //Service.CreateTempLicense();
                 // Set installation state that controls the install/uninstall buttons
@@ -198,7 +208,7 @@ namespace InstallerUI.ViewModel
             bootstrapper.ExecutePackageBegin += (_, ea) =>
             {
                 LogEvent("ExecutePackageBegin", ea);
-
+                CurrentAction = this.State == InstallationState.DetectedAbsent ? "We are installing software" : "We are uninstalling software";
                 // Trigger display of currently processed package
                 interactionService.RunOnUIThread(() =>
                 CurrentPackage = String.Format("Current package: {0}",
@@ -255,7 +265,7 @@ namespace InstallerUI.ViewModel
             bootstrapper.ApplyComplete += (_, ea) =>
             {
                 LogEvent("ApplyComplete", ea);
-
+                CurrentAction = this.State == InstallationState.DetectedAbsent ? "Uninstall was finished" : "Installation was finished";
                 // Everything is done, let's close the installer
                 interactionService.CloseUIAndExit();
             };
