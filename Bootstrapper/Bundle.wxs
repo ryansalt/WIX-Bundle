@@ -30,13 +30,23 @@
       <PackageGroupRef Id='NetCore2_X86' />
       <RollbackBoundary />
       <MsiPackage Id="SetupProject1" 
+                  Name="Setup Project 1" 
                   SourceFile="$(var.SetupProject1.TargetPath)" 
                   Visible="yes">
       </MsiPackage>
       <MsiPackage Id="SetupProject2" 
+                  Name="Setup Project 1" 
                   SourceFile="$(var.SetupProject2.TargetPath)" 
                   Visible="yes">
       </MsiPackage>
+      <MsiPackage SourceFile="$(var.SolutionDir)Publish\MySQL\mysql-installer-community-5.7.22.1.msi" 
+                  Id="MySQL" 
+                  DisplayName="MySQL Installer Community" 
+                  Cache="no" 
+                  DisplayInternalUI="no" 
+                  Visible="yes" 
+                  Permanent="no" 
+                  ForcePerMachine="yes" />
 		</Chain>
 	</Bundle>
 
