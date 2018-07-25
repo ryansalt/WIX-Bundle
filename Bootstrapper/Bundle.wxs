@@ -49,6 +49,15 @@
                   SourceFile="$(var.SetupProject2.TargetPath)" 
                   Visible="yes">
       </MsiPackage>
+      <!-- It must be downloaded manually, it is not included in GIT -->
+      <MsiPackage SourceFile="$(var.SolutionDir)Publish\MySQL\mysql-installer-community-5.7.22.1.msi" 
+                  Id="MySQL" 
+                  DisplayName="MySQL Server" 
+                  Cache="no" 
+                  DisplayInternalUI="no" 
+                  Visible="yes" 
+                  Permanent="no" 
+                  ForcePerMachine="yes" />
 		</Chain>
 	</Bundle>
 
