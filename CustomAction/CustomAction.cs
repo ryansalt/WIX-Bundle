@@ -14,7 +14,7 @@ namespace CustomAction
 
             session.Message(InstallMessage.Warning, new Record
             {
-                FormatString = "CustomAction was called after SetupProject1 was finished."
+                FormatString = "CustomAction was called after SetupProject1 installation was finished."
             });
 
             return ActionResult.Success;
