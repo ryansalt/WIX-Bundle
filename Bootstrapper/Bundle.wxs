@@ -43,7 +43,8 @@
       <RollbackBoundary />
       <MsiPackage Id="SetupProject1" 
                   SourceFile="$(var.SetupProject1.TargetPath)" 
-                  Visible="yes">
+                  Visible="yes"
+                  DisplayInternalUI="yes">
       </MsiPackage>
       <MsiPackage Id="SetupProject2" 
                   SourceFile="$(var.SetupProject2.TargetPath)" 
@@ -56,8 +57,7 @@
                   Cache="no" 
                   DisplayInternalUI="no" 
                   Visible="yes" 
-                  Permanent="no" 
-                  ForcePerMachine="yes" />
+                  Permanent="no" />
 		</Chain>
 	</Bundle>
 

@@ -22,9 +22,9 @@ namespace InstallerUI.Services
                     UseShellExecute = true,
                     Verb = "runas",
                     Arguments = Environment.Is64BitOperatingSystem ?
-                                String.Format(@"/C """"C:\Program Files (x86)\MySQL\MySQL Installer for Windows\MySQLInstallerConsole.exe"" community install server;5.7.22;X64:*:servertype=Server;servicename=MySqlSTATSports;port={0};datadir=""C:\mysql\statsports\data"";passwd=admin -silent"" ", port.ToString())
+                                String.Format(@"/C """"C:\Program Files (x86)\MySQL\MySQL Installer for Windows\MySQLInstallerConsole.exe"" community install server;5.7.22;X64:*:servertype=Server;servicename=MySqlASSIST;port={0};datadir=""C:\MySQL\Assist\data"";passwd=admin -silent"" ", port.ToString())
                                 :
-                                String.Format(@"/C """"C:\Program Files\MySQL\MySQL Installer for Windows\MySQLInstallerConsole.exe"" community install server;5.7.22;X86:*:servertype=Server;servicename=MySqlSTATSports;port={0};datadir=""C:\mysql\statsports\data"";passwd=admin -silent"" ", port.ToString())
+                                String.Format(@"/C """"C:\Program Files\MySQL\MySQL Installer for Windows\MySQLInstallerConsole.exe"" community install server;5.7.22;X86:*:servertype=Server;servicename=MySqlASSIST;port={0};datadir=""C:\MySQL\Assist\data"";passwd=admin -silent"" ", port.ToString())
                 }
             };
             p.Start();

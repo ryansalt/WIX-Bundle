@@ -200,24 +200,10 @@ namespace InstallerUI.ViewModel
             {
                 if (State == InstallationState.DetectedAbsent && IsCancelled != true)
                 {
-
                     if (ea.PackageId == "MySQL")
                     {
-                        LogEvent("StatSports-Installer>> Current Action: " + this.bootstrapper.Command.Action);
-                        LogEvent("StatSports-Installer>> Before MySQL server init and schema creation");
-
+                        CurrentAction = "Installing & Configuring MySQL Server";
                         MySQLService.InitServer(port);
-                        //Service.CreateSchema(DatabaseConfig);
-                    }
-
-                    // If whole install is finished then recheck port 20499
-                    if (ea.PackageId == "Electron")
-                    {
-                        //if (Service.CheckPort(port))
-                        //{
-                        //    //Service.CreateInstance(port, DatabaseConfig);
-                        //    //Service.CreateSchema(DatabaseConfig);
-                        //}
                     }
                 }
 
