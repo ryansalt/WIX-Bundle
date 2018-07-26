@@ -71,7 +71,9 @@
     <Compile Include="Data\Package.cs" />
     <Compile Include="Data\PackageType.cs" />
     <Compile Include="Interfaces\IInteractionService.cs" />
+    <Compile Include="Interfaces\IMySQLService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\MySQLService.cs" />
     <Compile Include="ViewModel\InstallerMainWindowViewModel.cs" />
     <Compile Include="View\InstallerMainWindow.xaml.cs">
       <DependentUpon>InstallerMainWindow.xaml</DependentUpon>

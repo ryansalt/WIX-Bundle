@@ -197,14 +197,14 @@
                         <Image Width="20" Height="20" Name="Button3_Image" Source="..\Assets\close@2x.png" RenderTransformOrigin="0.598,0.708" Margin="0,10,0,0"/>
                     </Button>
                 </StackPanel>
-                <TextBlock Foreground="Gray" FontSize="15" HorizontalAlignment="Center"  Margin="378,192,60,41" Width="342" ><Run Text="This is an installer demo base"/><Run Text="d"/><Run Text=" on WiX, WPF, Prism"/><LineBreak/><Run Text="and MEF"/><Run Text="."/><LineBreak/><Run Text="The "/><Run Text="Bundle includes:"/><LineBreak/><Run Text=" "/><Run Text="- SetupProject1"/><LineBreak/><Run Text=" "/><Run Text="- SetupProject1 will call CustomAction"/><LineBreak/><Run Text=" "/><Run Text="- SetupProject2"/><LineBreak/><Run Text=" "/><Run Text="- MySql"/><Run Text="-Community-Installer"/><LineBreak/><Run Text="It will install and configure MySQL Server 5.7"/><LineBreak/><Run/></TextBlock>
+                <TextBlock Foreground="Gray" FontSize="15" HorizontalAlignment="Center"  Margin="378,192,60,206" Width="342" ><Run Text="This is an installer demo base"/><Run Text="d"/><Run Text=" on WiX, WPF, Prism"/><LineBreak/><Run Text="and MEF"/><Run Text="."/><LineBreak/><Run Text="The "/><Run Text="Bundle includes:"/><LineBreak/><Run Text=" "/><Run Text="- SetupProject1"/><LineBreak/><Run Text=" "/><Run Text="- SetupProject1 will call CustomAction"/><LineBreak/><Run Text=" "/><Run Text="- SetupProject2"/><LineBreak/><Run Text=" "/><Run Text="- MySql"/><Run Text="-Community-Installer"/><LineBreak/><Run Text="It will install and configure MySQL Server 5.7"/><LineBreak/><Run/></TextBlock>
 
                 <Grid Name="InstallerGrid">
 
                     <TextBlock FontSize="20" HorizontalAlignment="Center"  Margin="378,136,10,402" Width="392" Text="{Binding CurrentAction, Mode=OneWay}" />
 
                     <StackPanel Grid.Row="3" Margin="0,230,0,0" Height="30" >
-                        <TextBlock HorizontalAlignment="Center" Foreground="Gray" Text="{Binding CurrentPackage, Mode=OneWay}"  />
+                        <TextBlock HorizontalAlignment="Center" FontSize="15" Foreground="Gray" Text="{Binding CurrentPackage, Mode=OneWay}"  />
                     </StackPanel>
 
                     <StackPanel Grid.Row="3" Margin="0,300,0,0" Width="600" Height="30">
@@ -212,7 +212,7 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="3" Margin="0,400,0,40" Width="600" Height="30">
-                        <TextBlock HorizontalAlignment="Center" Foreground="Gray" Text="{Binding Progress, Mode=OneWay}"></TextBlock>
+                        <TextBlock HorizontalAlignment="Center" FontSize="15" Foreground="Gray" Text="{Binding Progress, Mode=OneWay}"></TextBlock>
                     </StackPanel>
 
                     <StackPanel Grid.Row="3" Margin="0,420,0,0" Width="600" Height="30">

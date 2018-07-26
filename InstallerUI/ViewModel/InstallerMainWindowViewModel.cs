@@ -21,12 +21,17 @@ namespace InstallerUI.ViewModel
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class InstallerMainWindowViewModel : BindableBase
     {
+        private readonly int port = 20499;
         private BootstrapperApplication bootstrapper;
         private Engine engine;
         private readonly BootstrapperApplicationData bootstrapperApplicationData;
 
         [Import]
         private IInteractionService interactionService = null;
+
+
+        [Import(typeof(IMySQLService))]
+        private IMySQLService MySQLService { get; set; }
 
         #region Properties for data binding
         private DelegateCommand InstallCommandValue;
@@ -115,31 +120,7 @@ namespace InstallerUI.ViewModel
             {
                 SetProperty(ref CurrentActionValue, value);
             }
-        }
-
-        private Visibility AuthenticationGridVisibility;
-        public Visibility AuthenticationGridVisible
-        {
-            get => AuthenticationGridVisibility;
-            set => SetProperty(ref this.AuthenticationGridVisibility, value);
-
-        }
-
-        private Visibility InstallerGridVisibility;
-        public Visibility InstallerGridVisible
-        {
-            get => InstallerGridVisibility;
-            set => SetProperty(ref this.InstallerGridVisibility, value);
-        }
-
-        private Visibility LicenseVisibility;
-        public Visibility LicenseVisible
-        {
-            get => LicenseVisibility;
-            set => SetProperty(ref this.LicenseVisibility, value);
-        }
-
-        
+        }        
         #endregion
 
         [ImportingConstructor]
@@ -225,7 +206,7 @@ namespace InstallerUI.ViewModel
                         LogEvent("StatSports-Installer>> Current Action: " + this.bootstrapper.Command.Action);
                         LogEvent("StatSports-Installer>> Before MySQL server init and schema creation");
 
-                        //Service.InitServer(port, DatabaseConfig);
+                        MySQLService.InitServer(port);
                         //Service.CreateSchema(DatabaseConfig);
                     }
 
