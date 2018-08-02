@@ -12,7 +12,6 @@
          <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Mvvm.Desktop.dll" />
          <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.SharedInterfaces.dll" />
          <Payload SourceFile="$(var.InstallerUI.TargetDir)Newtonsoft.Json.dll" />
-         <!--<PayloadGroupRef Id="LicensePayload"/>-->
        </BootstrapperApplicationRef>
 
        <WixVariable Id="WixMbaPrereqLicenseUrl" Value="" />
