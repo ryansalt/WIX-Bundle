@@ -37,13 +37,13 @@ namespace InstallerUI.ViewModel
         private readonly DelegateCommand CancelCommandValue;
         public ICommand CancelCommand { get { return CancelCommandValue; } }
 
-        private InstallationState StateValue;
-        public InstallationState State
+        private InstallationStatus StatusValue;
+        public InstallationStatus Status
         {
-            get => StateValue;
+            get => StatusValue;
             set
             {
-                SetProperty(ref StateValue, value);
+                SetProperty(ref StatusValue, value);
                 InstallCommandValue.RaiseCanExecuteChanged();
                 UninstallCommandValue.RaiseCanExecuteChanged();
             }
@@ -124,31 +124,31 @@ namespace InstallerUI.ViewModel
             this.bootstrapper = bootstrapper;
             this.engine = engine;
 
-            // Setup commands
+            
             InstallCommandValue = new DelegateCommand(
                 () => engine.Plan(LaunchAction.Install),
-                () => !Installing && State == InstallationState.DetectedAbsent);
+                () => !Installing && Status == InstallationStatus.DetectedAbsent);
             UninstallCommandValue = new DelegateCommand(
                 () => engine.Plan(LaunchAction.Uninstall),
-                () => !Installing && State == InstallationState.DetectedPresent);
+                () => !Installing && Status == InstallationStatus.DetectedPresent);
             CancelCommandValue = new DelegateCommand(
                 () => IsCancelled = true);
 
 
-            // Setup event handlers
+
             bootstrapper.DetectBegin += (_, ea) =>
             {
                 LogEvent("DetectBegin", ea);
                 CurrentAction = ea.Installed ? "Preparing for software uninstall" : "Preparing for software install";
                 interactionService.RunOnUIThread(
-                    () => State = ea.Installed ? InstallationState.DetectedPresent : InstallationState.DetectedAbsent);
+                    () => Status = ea.Installed ? InstallationStatus.DetectedPresent : InstallationStatus.DetectedAbsent);
             };
 
             bootstrapper.DetectRelatedBundle += (_, ea) =>
             {
                 LogEvent("DetectRelatedBundle", ea);
 
-                // Save flag indicating whether this is a downgrade operation
+                
                 interactionService.RunOnUIThread(() => Downgrade |= ea.Operation == RelatedOperation.Downgrade);
             };
 
@@ -162,8 +162,8 @@ namespace InstallerUI.ViewModel
             {
                 LogEvent("PlanComplete", ea);
 
-                // Start apply phase
-                if (ea.Status >= 0 /* Success */)
+                
+                if (ea.Status >= 0)
                 {
                     engine.Apply(interactionService.GetMainWindowHandle());
                 }
@@ -173,15 +173,15 @@ namespace InstallerUI.ViewModel
             {
                 LogEvent("ApplyBegin");
 
-                // Set flag indicating that apply phase is running
+                
                 interactionService.RunOnUIThread(() => Installing = true);
             };
 
             bootstrapper.ExecutePackageBegin += (_, ea) =>
             {
                 LogEvent("ExecutePackageBegin", ea);
-                CurrentAction = this.State == InstallationState.DetectedAbsent ? "We are installing software" : "We are uninstalling software";
-                // Trigger display of currently processed package
+                CurrentAction = this.Status == InstallationStatus.DetectedAbsent ? "We are installing software" : "We are uninstalling software";
+                
                 interactionService.RunOnUIThread(() =>
                 CurrentPackage = String.Format("Current package: {0}",
                 bootstrapperBundleData.Data.Packages.Where(p => p.Id == ea.PackageId).FirstOrDefault().DisplayName));
@@ -189,7 +189,7 @@ namespace InstallerUI.ViewModel
 
             bootstrapper.ExecutePackageComplete += (_, ea) =>
             {
-                if (State == InstallationState.DetectedAbsent && IsCancelled != true)
+                if (Status == InstallationStatus.DetectedAbsent && IsCancelled != true)
                 {
                     if (ea.PackageId == "MySQL")
                     {
@@ -199,7 +199,7 @@ namespace InstallerUI.ViewModel
                 }
 
                 LogEvent("ExecutePackageComplete", ea);
-                // Remove currently processed package
+                
                 interactionService.RunOnUIThread(() => CurrentPackage = string.Empty);
             };
 
@@ -212,7 +212,7 @@ namespace InstallerUI.ViewModel
                 }
                 Progress = String.Format("Progress: {0}{1}", ea.OverallPercentage.ToString(), "%");
 
-                // Update progress indicator
+                
                 interactionService.RunOnUIThread(() =>
                 {
                     LocalProgress = ea.ProgressPercentage;

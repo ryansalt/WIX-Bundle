@@ -1,6 +1,6 @@
 ﻿namespace InstallerUI.Bootstrapper
 {
-    public enum InstallationState
+    public enum InstallationStatus
     {
         Initializing,
         DetectedAbsent,

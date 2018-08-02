@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper\InstallerUIBootstrapper.cs" />
-    <Compile Include="Bootstrapper\InstallationState.cs" />
+    <Compile Include="Bootstrapper\InstallationStatus.cs" />
     <Compile Include="Bootstrapper\BootstrapperBundleData.cs" />
     <Compile Include="Bootstrapper\Bundle.cs" />
     <Compile Include="Bootstrapper\Package.cs" />
