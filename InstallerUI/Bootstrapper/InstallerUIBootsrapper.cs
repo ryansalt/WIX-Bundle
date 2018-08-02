@@ -1,20 +1,19 @@
-﻿using System;
+﻿using InstallerUI.Interfaces;
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Newtonsoft.Json;
+using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using InstallerUI.Data;
-using InstallerUI.Interfaces;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using Newtonsoft.Json;
 
 namespace InstallerUI.Bootstrapper
 {
     public class InstallerUIBootsrapper : BootstrapperApplication, IInteractionService
     {
-        private BootstrapperApplicationData bootstrapperApplicationData;
+        private BootstrapperBundleData bootstrapperBundleData;
         private Window installerMainWindow;
         private IntPtr installerMainWindowHandle;
 
@@ -23,18 +22,14 @@ namespace InstallerUI.Bootstrapper
             Engine.Log(LogLevel.Verbose, "Entry point of WiX - Run method");
             using (var container = SetupCompositionContainer())
             {
-                bootstrapperApplicationData = new BootstrapperApplicationData();
-                Engine.Log(LogLevel.Verbose, JsonConvert.SerializeObject(bootstrapperApplicationData));
+                bootstrapperBundleData = new BootstrapperBundleData();
+                Engine.Log(LogLevel.Verbose, JsonConvert.SerializeObject(bootstrapperBundleData));
 
                 // Create main window with associated view model
-                Engine.Log(LogLevel.Verbose, "Creating a UI.");
                 installerMainWindow = container.GetExportedValue<Window>("InstallerMainWindow");
-                Engine.Log(LogLevel.Verbose, "Creating a UI 1.");
                 installerMainWindowHandle = new WindowInteropHelper(installerMainWindow).EnsureHandle();
-                Engine.Log(LogLevel.Verbose, "Creating a UI 2.");
 
                 Engine.Detect();
-                Engine.Log(LogLevel.Verbose, "Creating a UI 3.");
                 if (Command.Display == Display.Passive || Command.Display == Display.Full)
                 {
                     installerMainWindow.Show();
@@ -55,11 +50,6 @@ namespace InstallerUI.Bootstrapper
             container.ComposeExportedValue<Engine>(Engine);
             container.ComposeExportedValue<IInteractionService>(this);
             return container;
-        }
-
-        public void ShowMessageBox(string message)
-        {
-            installerMainWindow.Dispatcher.BeginInvoke(new Action(() => MessageBox.Show(message)), null);
         }
 
         public void CloseUIAndExit()

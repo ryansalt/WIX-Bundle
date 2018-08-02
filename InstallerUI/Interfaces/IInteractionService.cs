@@ -8,7 +8,6 @@ namespace InstallerUI.Interfaces
 {
     public interface IInteractionService
     {
-        void ShowMessageBox(string message);
         void CloseUIAndExit();
         void RunOnUIThread(Action body);
         IntPtr GetMainWindowHandle();

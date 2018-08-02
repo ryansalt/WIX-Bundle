@@ -1,18 +1,12 @@
 ﻿using InstallerUI.Bootstrapper;
-using InstallerUI.Data;
 using InstallerUI.Interfaces;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace InstallerUI.ViewModel
@@ -21,10 +15,10 @@ namespace InstallerUI.ViewModel
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class InstallerMainWindowViewModel : BindableBase
     {
-        private readonly int port = 20499;
+        private readonly int port = 3307;
         private BootstrapperApplication bootstrapper;
         private Engine engine;
-        private readonly BootstrapperApplicationData bootstrapperApplicationData;
+        private readonly BootstrapperBundleData bootstrapperBundleData;
 
         [Import]
         private IInteractionService interactionService = null;
@@ -40,7 +34,7 @@ namespace InstallerUI.ViewModel
         private DelegateCommand UninstallCommandValue;
         public ICommand UninstallCommand { get { return UninstallCommandValue; } }
 
-        private DelegateCommand CancelCommandValue;
+        private readonly DelegateCommand CancelCommandValue;
         public ICommand CancelCommand { get { return CancelCommandValue; } }
 
         private InstallationState StateValue;
@@ -126,7 +120,7 @@ namespace InstallerUI.ViewModel
         [ImportingConstructor]
         public InstallerMainWindowViewModel(BootstrapperApplication bootstrapper, Engine engine)
         {
-            bootstrapperApplicationData = new BootstrapperApplicationData();
+            bootstrapperBundleData = new BootstrapperBundleData();
             this.bootstrapper = bootstrapper;
             this.engine = engine;
 
@@ -146,9 +140,6 @@ namespace InstallerUI.ViewModel
             {
                 LogEvent("DetectBegin", ea);
                 CurrentAction = ea.Installed ? "Preparing for software uninstall" : "Preparing for software install";
-                //Write the temporary license file after it was read from embedded file
-                //Service.CreateTempLicense();
-                // Set installation state that controls the install/uninstall buttons
                 interactionService.RunOnUIThread(
                     () => State = ea.Installed ? InstallationState.DetectedPresent : InstallationState.DetectedAbsent);
             };
@@ -193,7 +184,7 @@ namespace InstallerUI.ViewModel
                 // Trigger display of currently processed package
                 interactionService.RunOnUIThread(() =>
                 CurrentPackage = String.Format("Current package: {0}",
-                bootstrapperApplicationData.Data.Packages.Where(p => p.Id == ea.PackageId).FirstOrDefault().DisplayName));
+                bootstrapperBundleData.Data.Packages.Where(p => p.Id == ea.PackageId).FirstOrDefault().DisplayName));
             };
 
             bootstrapper.ExecutePackageComplete += (_, ea) =>
@@ -232,92 +223,16 @@ namespace InstallerUI.ViewModel
             bootstrapper.ApplyComplete += (_, ea) =>
             {
                 LogEvent("ApplyComplete", ea);
-                CurrentAction = this.State == InstallationState.DetectedAbsent ? "Uninstall was finished" : "Installation was finished";
-                // Everything is done, let's close the installer
                 interactionService.CloseUIAndExit();
             };
         }
 
-        private void SetupEventHandlersForLogging()
-        {
-            bootstrapper.Startup += (_, ea) => LogEvent("Startup");
-            bootstrapper.Shutdown += (_, ea) => LogEvent("Shutdown");
-            bootstrapper.SystemShutdown += (_, ea) => LogEvent("SystemShutdown", ea);
-            bootstrapper.DetectCompatiblePackage += (_, ea) => LogEvent("DetectCompatiblePackage", ea);
-            bootstrapper.DetectForwardCompatibleBundle += (_, ea) => LogEvent("DetectForwardCompatibleBundle", ea);
-            bootstrapper.DetectMsiFeature += (_, ea) => LogEvent("DetectMsiFeature", ea);
-            bootstrapper.DetectPackageBegin += (_, ea) => LogEvent("DetectPackageBegin", ea);
-            bootstrapper.DetectPackageComplete += (_, ea) => LogEvent("DetectPackageComplete", ea);
-            bootstrapper.DetectPriorBundle += (_, ea) => LogEvent("DetectPriorBundle", ea);
-            bootstrapper.DetectRelatedMsiPackage += (_, ea) => LogEvent("DetectRelatedMsiPackage", ea);
-            bootstrapper.DetectTargetMsiPackage += (_, ea) => LogEvent("DetectTargetMsiPackage", ea);
-            bootstrapper.DetectUpdate += (_, ea) => LogEvent("DetectUpdate", ea);
-            bootstrapper.DetectUpdateBegin += (_, ea) => LogEvent("DetectUpdateBegin", ea);
-            bootstrapper.DetectUpdateComplete += (_, ea) => LogEvent("DetectUpdateComplete", ea);
-            bootstrapper.Elevate += (_, ea) => LogEvent("Elevate", ea);
-            bootstrapper.Error += (_, ea) => LogEvent("Error", ea);
-            bootstrapper.ExecuteBegin += (_, ea) => LogEvent("ExecuteBegin", ea);
-            bootstrapper.ExecuteComplete += (_, ea) => LogEvent("ExecuteComplete", ea);
-            bootstrapper.ExecuteFilesInUse += (_, ea) => LogEvent("ExecuteFilesInUse", ea);
-            bootstrapper.ExecuteMsiMessage += (_, ea) => LogEvent("ExecuteMsiMessage", ea);
-            bootstrapper.ExecutePatchTarget += (_, ea) => LogEvent("ExecutePatchTarget", ea);
-            bootstrapper.LaunchApprovedExeBegin += (_, ea) => LogEvent("LaunchApprovedExeBegin");
-            bootstrapper.LaunchApprovedExeComplete += (_, ea) => LogEvent("LaunchApprovedExeComplete", ea);
-            bootstrapper.PlanBegin += (_, ea) => LogEvent("PlanBegin", ea);
-            bootstrapper.PlanCompatiblePackage += (_, ea) => LogEvent("PlanCompatiblePackage", ea);
-            bootstrapper.PlanMsiFeature += (_, ea) => LogEvent("PlanMsiFeature", ea);
-            bootstrapper.PlanPackageBegin += (_, ea) => LogEvent("PlanPackageBegin", ea);
-            bootstrapper.PlanPackageComplete += (_, ea) => LogEvent("PlanPackageComplete", ea);
-            bootstrapper.PlanRelatedBundle += (_, ea) => LogEvent("PlanRelatedBundle", ea);
-            bootstrapper.PlanTargetMsiPackage += (_, ea) => LogEvent("PlanTargetMsiPackage", ea);
-            bootstrapper.Progress += (_, ea) => LogEvent("Progress", ea);
-            bootstrapper.RegisterBegin += (_, ea) => LogEvent("RegisterBegin");
-            bootstrapper.RegisterComplete += (_, ea) => LogEvent("RegisterComplete", ea);
-            bootstrapper.ResolveSource += (_, ea) => LogEvent("ResolveSource", ea);
-            bootstrapper.RestartRequired += (_, ea) => LogEvent("RestartRequired", ea);
-            bootstrapper.UnregisterBegin += (_, ea) => LogEvent("UnregisterBegin", ea);
-            bootstrapper.UnregisterComplete += (_, ea) => LogEvent("UnregisterComplete", ea);
-        }
-
-
-
         private void DetectComplete(object sender, DetectCompleteEventArgs e)
         {
-            // If necessary, parse the command line string before any planning
-            // (e.g. detect installation folder)
-
             if (LaunchAction.Uninstall == bootstrapper.Command.Action)
             {
                 engine.Log(LogLevel.Verbose, "Invoking automatic plan for uninstall");
                 engine.Plan(LaunchAction.Uninstall);
-            }
-            else if (e.Status >= 0 /* Success */)
-            {
-                if (Downgrade)
-                {
-                    // What do you want to do in case of downgrade?
-                    // Here: Stop installation
-
-                    string message = "Sorry, we do not support downgrades.";
-                    engine.Log(LogLevel.Verbose, message);
-                    if (bootstrapper.Command.Display == Display.Full)
-                    {
-                        interactionService.ShowMessageBox(message);
-                        interactionService.CloseUIAndExit();
-                    }
-                }
-
-                if (bootstrapper.Command.Action == LaunchAction.Layout)
-                {
-                    // Copies all of the Bundle content to a specified directory
-                    engine.Plan(LaunchAction.Layout);
-                }
-                else if (bootstrapper.Command.Display != Display.Full)
-                {
-                    // If we're not waiting for the user to click install, dispatch plan with the default action.
-                    engine.Log(LogLevel.Verbose, "Invoking automatic plan for non-interactive mode.");
-                    engine.Plan(LaunchAction.Install);
-                }
             }
         }
 

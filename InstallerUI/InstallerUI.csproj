@@ -66,10 +66,9 @@
   <ItemGroup>
     <Compile Include="Bootstrapper\InstallerUIBootsrapper.cs" />
     <Compile Include="Bootstrapper\InstallationState.cs" />
-    <Compile Include="Data\BootstrapperApplicationData.cs" />
-    <Compile Include="Data\Bundle.cs" />
-    <Compile Include="Data\Package.cs" />
-    <Compile Include="Data\PackageType.cs" />
+    <Compile Include="Bootstrapper\BootstrapperBundleData.cs" />
+    <Compile Include="Bootstrapper\Bundle.cs" />
+    <Compile Include="Bootstrapper\Package.cs" />
     <Compile Include="Interfaces\IInteractionService.cs" />
     <Compile Include="Interfaces\IMySQLService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
