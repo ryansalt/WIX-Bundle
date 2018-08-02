@@ -13,7 +13,7 @@ namespace InstallerUI.ViewModel
 {
     [Export]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class InstallerMainWindowViewModel : BindableBase
+    public class InstallerUIWindowViewModel : BindableBase
     {
         private readonly int port = 3307;
         private BootstrapperApplication bootstrapper;
@@ -118,7 +118,7 @@ namespace InstallerUI.ViewModel
         #endregion
 
         [ImportingConstructor]
-        public InstallerMainWindowViewModel(BootstrapperApplication bootstrapper, Engine engine)
+        public InstallerUIWindowViewModel(BootstrapperApplication bootstrapper, Engine engine)
         {
             bootstrapperBundleData = new BootstrapperBundleData();
             this.bootstrapper = bootstrapper;

@@ -11,11 +11,11 @@ using System.Windows.Threading;
 
 namespace InstallerUI.Bootstrapper
 {
-    public class InstallerUIBootsrapper : BootstrapperApplication, IInteractionService
+    public class InstallerUIBootstrapper : BootstrapperApplication, IInteractionService
     {
         private BootstrapperBundleData bootstrapperBundleData;
-        private Window installerMainWindow;
-        private IntPtr installerMainWindowHandle;
+        private Window installerUIWindow;
+        private IntPtr installerUIWindowHandle;
 
         protected override void Run()
         {
@@ -26,13 +26,13 @@ namespace InstallerUI.Bootstrapper
                 Engine.Log(LogLevel.Verbose, JsonConvert.SerializeObject(bootstrapperBundleData));
 
                 // Create main window with associated view model
-                installerMainWindow = container.GetExportedValue<Window>("InstallerMainWindow");
-                installerMainWindowHandle = new WindowInteropHelper(installerMainWindow).EnsureHandle();
+                installerUIWindow = container.GetExportedValue<Window>("InstallerUIWindow");
+                installerUIWindowHandle = new WindowInteropHelper(installerUIWindow).EnsureHandle();
 
                 Engine.Detect();
                 if (Command.Display == Display.Passive || Command.Display == Display.Full)
                 {
-                    installerMainWindow.Show();
+                    installerUIWindow.Show();
                 }
                 Dispatcher.Run();
 
@@ -54,17 +54,17 @@ namespace InstallerUI.Bootstrapper
 
         public void CloseUIAndExit()
         {
-            installerMainWindow.Dispatcher.BeginInvoke(new Action(() => installerMainWindow.Close()));
+            installerUIWindow.Dispatcher.BeginInvoke(new Action(() => installerUIWindow.Close()));
         }
 
         public void RunOnUIThread(Action body)
         {
-            installerMainWindow.Dispatcher.BeginInvoke(body, null);
+            installerUIWindow.Dispatcher.BeginInvoke(body, null);
         }
 
         public IntPtr GetMainWindowHandle()
         {
-            return installerMainWindowHandle;
+            return installerUIWindowHandle;
         }
     }
 }

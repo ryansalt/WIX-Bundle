@@ -20,16 +20,16 @@ using System.Windows.Shapes;
 namespace InstallerUI.View
 {
     /// <summary>
-    /// Interaction logic for InstallerMainWindow.xaml
+    /// Interaction logic for InstallerUIWindow.xaml
     /// </summary>
-    [Export("InstallerMainWindow", typeof(Window))]
+    [Export("InstallerUIWindow", typeof(Window))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class InstallerMainWindow : Window
+    public partial class InstallerUIWindow : Window
     {
 
 
         [ImportingConstructor]
-        public InstallerMainWindow(InstallerMainWindowViewModel viewModel, Engine engine)
+        public InstallerUIWindow(InstallerUIWindowViewModel viewModel, Engine engine)
         {
             DataContext = viewModel;
 
