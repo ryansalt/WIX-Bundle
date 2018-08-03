@@ -1,4 +1,6 @@
 ![alt text](https://github.com/assist-software/WIX-Bundle/blob/article2/InstallerUI/Assets/article2.png)
+
+
 Software that will be installed:
 - dotnet-runtime-2.1.0-preview1-26216-03-win-x64.exe (Windows 64Bit);
 - dotnet-runtime-2.1.0-preview1-26216-03-win-x86.exe (Windows 32Bit);
