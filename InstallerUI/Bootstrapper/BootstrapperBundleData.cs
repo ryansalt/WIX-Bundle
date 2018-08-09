@@ -90,9 +90,15 @@ namespace InstallerUI.Bootstrapper
 
             Package[] packages = ParsePackagesFromXml(root);
             bundle.Packages = packages;
-            
 
-            return bundle;
+			// Custom table extension for license file
+			XPathNavigator licenseNode = root.SelectSingleNode("/p:BootstrapperApplicationData/p:LicenseInformation", namespaceManager);
+			if (licenseNode != null)
+			{
+				bundle.LicenseFileName = GetStringAttribute(licenseNode, "LicenseFile");
+			}
+
+			return bundle;
         }
 
         public static Package[] ParsePackagesFromXml(XPathNavigator root)

@@ -24,8 +24,8 @@ namespace InstallerUI.ViewModel
         private IInteractionService interactionService = null;
 
 
-        [Import(typeof(IMySQLService))]
-        private IMySQLService MySQLService { get; set; }
+        //[Import(typeof(IMySQLService))]
+        //private IMySQLService MySQLService { get; set; }
 
         #region Properties for data binding
         private DelegateCommand InstallCommandValue;
@@ -189,14 +189,14 @@ namespace InstallerUI.ViewModel
 
             bootstrapper.ExecutePackageComplete += (_, ea) =>
             {
-                if (Status == InstallationStatus.DetectedAbsent && IsCancelled != true)
-                {
-                    if (ea.PackageId == "MySQL")
-                    {
-                        CurrentAction = "Installing & Configuring MySQL Server";
-                        MySQLService.InitServer(port);
-                    }
-                }
+                //if (Status == InstallationStatus.DetectedAbsent && IsCancelled != true)
+                //{
+                //    if (ea.PackageId == "MySQL")
+                //    {
+                //        CurrentAction = "Installing & Configuring MySQL Server";
+                //        MySQLService.InitServer(port);
+                //    }
+                //}
 
                 LogEvent("ExecutePackageComplete", ea);
                 

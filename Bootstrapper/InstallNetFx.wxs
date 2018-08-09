@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+
+		<!--
+		<util:RegistrySearch Root="HKLM"
+						Key="SOFTWARE\Microsoft\ASP.NET Core\Runtime Package Store\v2.0"
+						Result="exists"
+						Variable="NetCore2_x64_Installed"
+						Win64="yes"
+                         />
+
+		<util:RegistrySearch Root="HKLM"
+							 Key="SOFTWARE\Microsoft\ASP.NET Core\Runtime Package Store\v2.0"
+							 Result="exists"
+							 Variable="NetCore2_x86_Installed"
+                         />
+		-->
+
+		<!-- .Net 4.6.2 Framework-->
+		
+		<!--<PropertyRef Id="NetFx462Redist"/>
+
+		<PackageGroup Id="Netfx462FullPackage">
+			<ExePackage Id="NetFx462Redist"
+						Cache="yes"
+						Compressed="yes"
+						PerMachine="yes"
+						Permanent="yes"
+						Vital="yes"
+						InstallCommand="/s"
+						UninstallCommand="/s /uninstall"
+						SourceFile="$(var.SolutionDir)Publish\DotNet\NDP462-KB3151800-x86-x64-AllOS-ENU.exe"
+						DetectCondition="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED"
+						InstallCondition="NOT WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED"
+			/>
+		</PackageGroup>-->
+
+		<!-- .Net core -->
+		<!--
+		<PackageGroup Id="NetCore2_X64">
+			<ExePackage Id="NetCore2_X64"
+						Cache="yes"
+						Compressed="yes"
+						PerMachine="yes"
+						Permanent="yes"
+						Vital="yes"
+						InstallCondition="VersionNT64"
+						InstallCommand="/s"
+						UninstallCommand="/s /uninstall"
+						SourceFile="$(var.SolutionDir)Publish\DotNet\dotnet-runtime-2.1.0-preview1-26216-03-win-x64.exe"
+						DetectCondition="NetCore2_x64_Installed"  />
+		</PackageGroup>
+		-->
+
+		<!--
+		<PackageGroup Id="NetCore2_X86">
+			<ExePackage Id="NetCore2_X86"
+						Cache="yes"
+						Compressed="yes"
+						PerMachine="yes"
+						Permanent="yes"
+						Vital="yes"
+						InstallCondition="NOT VersionNT64"
+						InstallCommand="/s"
+						UninstallCommand="/s /uninstall"
+						SourceFile="$(var.SolutionDir)Publish\DotNet\dotnet-runtime-2.1.0-preview1-26216-03-win-x86.exe"
+						DetectCondition="NetCore2_x86_Installed" />
+		</PackageGroup>
+		-->
+	</Fragment>
+</Wix>

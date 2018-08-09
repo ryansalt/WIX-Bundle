@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix 
+	xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+	>
+	<Fragment>
+
+		<!--
+			###
+			### Detect Installed IIS Features using registry entries as listed on the URL below:
+			### https://docs.microsoft.com/en-us/iis/install/installing-iis-7/discover-installed-components
+			### Expanded from
+			### https://stackoverflow.com/a/24510331/3873206
+			### With feature detection from
+			### https://stackoverflow.com/a/27014986/3873206
+			###
+		-->
+
+		<!--
+			#####
+			##### WEB SERVER ROLE + IIS
+			#####
+			-->
+		<util:RegistrySearch Id="REG_WebServer" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="W3SVC" Variable="WebServer" />
+
+		<!--
+			#####
+			##### COMMON HTTP FEATURES
+			##### Scheduled after REG_WebServer
+			#####
+			-->
+		<util:RegistrySearch Id="REG_StaticContent" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="StaticContent" Variable="StaticContent" After="REG_WebServer" />
+		<util:RegistrySearch Id="REG_DefaultDocument" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="DefaultDocument" Variable="DefaultDocument" After="REG_StaticContent" />
+		<util:RegistrySearch Id="REG_DirectoryBrowse" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="DirectoryBrowse" Variable="DirectoryBrowse" After="REG_DefaultDocument" />
+		<util:RegistrySearch Id="REG_HttpErrors" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="HttpErrors" Variable="HttpErrors" After="REG_DirectoryBrowse" />
+		<util:RegistrySearch Id="REG_HttpRedirect" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="HttpRedirect" Variable="HttpRedirect" After="REG_HttpErrors" />
+
+		<!--
+			#####
+			##### APPLICATION DEVELOPMENT
+			##### Scheduled after REG_WebServer
+			#####
+			-->
+
+		<util:RegistrySearch Id="REG_ASPNET" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ASPNET" Variable="ASPNET" After="REG_WebServer" />
+		<util:RegistrySearch Id="REG_ASPNET45" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ASPNET45" Variable="ASPNET45" After="REG_ASPNET" />
+		<util:RegistrySearch Id="REG_NetFxExtensibility" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="NetFxExtensibility" Variable="NetFxExtensibility" After="REG_ASPNET45" />
+		<util:RegistrySearch Id="REG_NetFxExtensibility45" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="NetFxExtensibility45" Variable="NetFxExtensibility45" After="REG_NetFxExtensibility" />
+		<util:RegistrySearch Id="REG_ASP" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ASP" Variable="ASP" After="REG_NetFxExtensibility45" />
+		<util:RegistrySearch Id="REG_CGI" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="CGI" Variable="CGI" After="REG_ASP" />
+		<util:RegistrySearch Id="REG_ISAPIExtensions" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ISAPIExtensions" Variable="ISAPIExtensions" After="REG_CGI" />
+		<util:RegistrySearch Id="REG_ISAPIFilter" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ISAPIFilter" Variable="ISAPIFilter" After="REG_ISAPIExtensions" />
+		<util:RegistrySearch Id="REG_ServerSideInclude" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ServerSideInclude" Variable="ServerSideInclude" After="REG_ISAPIFilter" />
+
+		<!--
+			#####
+			##### HEALTH AND DIAGNOSTICS
+			##### Scheduled after REG_WebServer
+			#####
+			-->
+
+		<util:RegistrySearch Id="REG_HttpLogging" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="HttpLogging" Variable="HttpLogging" After="REG_WebServer" />
+		<util:RegistrySearch Id="REG_LoggingLibraries" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="LoggingLibraries" Variable="LoggingLibraries" After="REG_HttpLogging" />
+		<util:RegistrySearch Id="REG_RequestMonitor" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="RequestMonitor" Variable="RequestMonitor" After="REG_LoggingLibraries" />
+		<util:RegistrySearch Id="REG_HttpTracing" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="HttpTracing" Variable="HttpTracing" After="REG_RequestMonitor" />
+		<util:RegistrySearch Id="REG_CustomLogging" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="CustomLogging" Variable="CustomLogging" After="REG_HttpTracing" />
+		<util:RegistrySearch Id="REG_ODBCLogging" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ODBCLogging" Variable="ODBCLogging" After="REG_CustomLogging" />
+
+		<!--
+			#####
+			##### SECURITY
+			##### Scheduled after REG_WebServer
+			#####
+			-->
+
+		<util:RegistrySearch Id="REG_BasicAuthentication" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="BasicAuthentication" Variable="BasicAuthentication" After="REG_WebServer" />
+		<util:RegistrySearch Id="REG_WindowsAuthentication" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="WindowsAuthentication" Variable="WindowsAuthentication" After="REG_BasicAuthentication" />
+		<util:RegistrySearch Id="REG_DigestAuthentication" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="DigestAuthentication" Variable="DigestAuthentication" After="REG_WindowsAuthentication" />
+		<util:RegistrySearch Id="REG_ClientCertificateMappingAuthentication" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ClientCertificateMappingAuthentication" Variable="ClientCertificateMappingAuthentication" After="REG_DigestAuthentication" />
+		<util:RegistrySearch Id="REG_IISClientCertificateMappingAuthentication" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="IISClientCertificateMappingAuthentication" Variable="IISClientCertificateMappingAuthentication" After="REG_ClientCertificateMappingAuthentication" />
+		<util:RegistrySearch Id="REG_Authorization" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="Authorization" Variable="Authorization" After="REG_IISClientCertificateMappingAuthentication" />
+		<util:RegistrySearch Id="REG_RequestFiltering" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="RequestFiltering" Variable="RequestFiltering" After="REG_Authorization" />
+		<util:RegistrySearch Id="REG_IPSecurity" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="IPSecurity" Variable="IPSecurity" After="REG_RequestFiltering" />
+
+		<!--
+			#####
+			##### PERFORMANCE FEATURES
+			##### Scheduled after REG_WebServer
+			#####
+			-->
+		<util:RegistrySearch Id="REG_HttpCompressionStatic" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="HttpCompressionStatic" Variable="HttpCompressionStatic" After="REG_WebServer" />
+		<util:RegistrySearch Id="REG_HttpCompressionDynamic" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="HttpCompressionDynamic" Variable="HttpCompressionDynamic" After="REG_HttpCompressionStatic" />
+
+		<!--
+			#####
+			##### Management Tools
+			##### Scheduled after REG_WebServer
+			#####
+		-->
+		<util:RegistrySearch Id="REG_ManagementConsole" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ManagementConsole" Variable="ManagementConsole" After="REG_WebServer" />
+		<util:RegistrySearch Id="REG_ManagementScriptingTools" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ManagementScriptingTools" Variable="ManagementScriptingTools" After="REG_ManagementConsole" />
+		<util:RegistrySearch Id="REG_ManagementService" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="AdminService" Variable="ManagementService" After="REG_ManagementScriptingTools" />
+
+		<!--
+			#####
+			##### Windows Process Activation Service
+			##### Scheduled after REG_WebServer
+			#####
+		-->
+		<util:RegistrySearch Id="REG_ProcessModel" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="ProcessModel" Variable="ProcessModel" After="REG_WebServer" />
+		<util:RegistrySearch Id="REG_NetFxEnvironment" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="NetFxEnvironment" Variable="NetFxEnvironment" After="REG_ProcessModel" />
+		<util:RegistrySearch Id="REG_WASConfigurationAPI" Root="HKLM" Key="SOFTWARE\Microsoft\InetStp\Components" Value="WASConfigurationAPI" Variable="WASConfigurationAPI" After="REG_NetFxEnvironment" />
+
+		<PackageGroup Id="InstallIIS">
+
+			<!--
+			#####
+			##### WEB SERVER ROLE + IIS
+			#####
+			-->
+			<ExePackage
+				Id="IIS_WebServerRole"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-WebServerRole"
+				DetectCondition="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-WebServerRole"
+				InstallCondition='NOT WebServer'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_WebServer"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-WebServer"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-WebServer"
+				InstallCondition='NOT WebServer'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<!--
+			#####
+			##### COMMON HTTP FEATURES
+			#####
+			-->
+			
+			<ExePackage 
+				Id="IIS_CommonHttpFeatures"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-CommonHttpFeatures"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-CommonHttpFeatures"
+				InstallCondition='NOT WebServer OR NOT (StaticContent OR DefaultDocument OR HttpErrors OR HttpRedirect)'
+				PerMachine='yes'
+				>
+			</ExePackage>
+			
+			<ExePackage
+				Id="IIS_StaticContent"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-StaticContent"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-StaticContent"
+				InstallCondition='NOT StaticContent'
+				PerMachine='yes'
+				>
+			</ExePackage>
+			
+			<ExePackage
+				Id="IIS_DefaultDocument"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-DefaultDocument"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-DefaultDocument"
+				InstallCondition='NOT DefaultDocument'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<!--
+			<ExePackage
+				Id="IIS_DirectoryBrowsing"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-DirectoryBrowsing"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-DirectoryBrowsing"
+				InstallCondition='NOT DirectoryBrowsing'
+				PerMachine='yes'
+				>
+			</ExePackage>-->
+			
+			<ExePackage
+				Id="IIS_HttpErrors"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-HttpErrors"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-HttpErrors"
+				InstallCondition='NOT HttpErrors'
+				PerMachine='yes'
+				>
+			</ExePackage>
+			
+			<ExePackage
+				Id="IIS_HttpRedirect"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-HttpRedirect"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-HttpRedirect"
+				InstallCondition='NOT HttpRedirect'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<!--
+			#####
+			##### APPLICATION DEVELOPMENT
+			#####
+			-->
+
+			<ExePackage
+				Id="IIS_ApplicationDevelopment"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ApplicationDevelopment"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ApplicationDevelopment"
+				InstallCondition='NOT WebServer OR NOT (ASPNET OR ASPNET45 OR NetFxExtensibility OR NetFxExtensibility45 OR ISAPIExtensions OR ISAPIFilter)'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_ASPNET"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ASPNET"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ASPNET"
+				InstallCondition='NOT ASPNET'
+				PerMachine='yes'
+			>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_ASPNET45"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ASPNET45"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ASPNET45"
+				InstallCondition='NOT ASPNET45'
+				PerMachine='yes'
+			>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_NetFxExtensibility"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-NetFxExtensibility"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-NetFxExtensibility"
+				InstallCondition='NOT NetFxExtensibility'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_NetFxExtensibility45"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-NetFxExtensibility45"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-NetFxExtensibility45"
+				InstallCondition='NOT NetFxExtensibility45'
+				PerMachine='yes'
+			>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_ISAPIExtensions"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ISAPIExtensions"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ISAPIExtensions"
+				InstallCondition='NOT ISAPIExtensions'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<!--
+			<ExePackage
+				Id="IIS_ASP"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ASP"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ASP"
+				InstallCondition='NOT ASP'
+				PerMachine='yes'
+				>
+			</ExePackage>-->
+
+			<!--
+			<ExePackage
+				Id="IIS_CGI"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-CGI"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-CGI"
+				InstallCondition='NOT CGI'
+				PerMachine='yes'
+				>
+			</ExePackage>-->
+
+			<ExePackage
+				Id="IIS_ISAPIFilter"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ISAPIFilter"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ISAPIFilter"
+				InstallCondition='NOT ISAPIFilter'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<!--
+			#####
+			##### HEALTH AND DIAGNOSTICS
+			#####
+			-->
+
+			<ExePackage
+				Id="IIS_HealthAndDiagnostics"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-HealthAndDiagnostics"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-HealthAndDiagnostics"
+				InstallCondition='NOT WebServer OR NOT (HttpLogging OR LoggingLibraries OR RequestMonitor OR HttpTracing)'
+				PerMachine='yes'
+				>
+			</ExePackage>
+			
+			<ExePackage
+				Id="IIS_HttpLogging"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-HttpLogging"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-HttpLogging"
+				InstallCondition='NOT HttpLogging'
+				PerMachine='yes'
+				>
+			</ExePackage>
+			
+			<ExePackage
+				Id="IIS_LoggingLibraries"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-LoggingLibraries"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-LoggingLibraries"
+				InstallCondition='NOT LoggingLibraries'
+				PerMachine='yes'
+				>
+			</ExePackage>
+			
+			<ExePackage
+				Id="IIS_RequestMonitor"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-RequestMonitor"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-RequestMonitor"
+				InstallCondition='NOT RequestMonitor'
+				PerMachine='yes'
+				>
+			</ExePackage>
+			
+			<!--<ExePackage
+				Id="IIS_HttpTracing"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-HttpTracing"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-HttpTracing"
+				InstallCondition='NOT HttpTracing'
+				PerMachine='yes'
+				>
+			</ExePackage>-->
+
+			<!--<ExePackage
+				Id="IIS_CustomLogging"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-CustomLogging"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-CustomLogging"
+				InstallCondition='NOT CustomLogging'
+				PerMachine='yes'
+				>
+			</ExePackage>-->
+
+			<!--<ExePackage
+				Id="IIS_ODBCLogging"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ODBCLogging"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ODBCLogging"
+				InstallCondition='NOT ODBCLogging'
+				PerMachine='yes'
+			>
+			</ExePackage>-->
+
+			<!--
+			#####
+			##### SECURITY
+			#####
+			-->
+
+			<ExePackage
+				Id="IIS_Security"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-Security"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-Security"
+				InstallCondition='NOT WebServer OR NOT (BasicAuthentication OR WindowsAuthentication OR RequestFiltering)'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_BasicAuthentication"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-BasicAuthentication"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-BasicAuthentication"
+				InstallCondition='NOT BasicAuthentication'
+				PerMachine='yes'
+			>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_WindowsAuthentication"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-WindowsAuthentication"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-WindowsAuthentication"
+				InstallCondition='NOT WindowsAuthentication'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<!--<ExePackage
+				Id="IIS_DigestAuthentication"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-DigestAuthentication"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-DigestAuthentication"
+				InstallCondition='NOT DigestAuthentication'
+				PerMachine='yes'
+			>
+			</ExePackage>-->
+
+			<!--<ExePackage
+				Id="IIS_ClientCertificateMappingAuthentication"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ClientCertificateMappingAuthentication"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ClientCertificateMappingAuthentication"
+				InstallCondition='NOT ClientCertificateMappingAuthentication'
+				PerMachine='yes'
+			>
+			</ExePackage>-->
+
+			<!--<ExePackage
+				Id="IIS_IISClientCertificateMappingAuthentication"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-IISClientCertificateMappingAuthentication"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-IISClientCertificateMappingAuthentication"
+				InstallCondition='NOT IISClientCertificateMappingAuthentication'
+				PerMachine='yes'
+			>
+			</ExePackage>-->
+
+			<!--<ExePackage
+				Id="IIS_Authorization"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-Authorization"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-Authorization"
+				InstallCondition='NOT Authorization'
+				PerMachine='yes'
+			>
+			</ExePackage>-->
+
+			<ExePackage
+				Id="IIS_RequestFiltering"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-RequestFiltering"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-RequestFiltering"
+				InstallCondition='NOT RequestFiltering'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<!--<ExePackage
+				Id="IIS_IPSecurity"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-IPSecurity"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-IPSecurity"
+				InstallCondition='NOT IPSecurity'
+				PerMachine='yes'
+				>
+			</ExePackage>-->
+
+			<!--
+			#####
+			##### PERFORMANCE FEATURES
+			#####
+			-->
+			
+			<ExePackage
+				Id="IIS_Performance"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-Performance"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-Performance"
+				InstallCondition='NOT WebServer OR NOT (HttpCompressionStatic OR HttpCompressionDynamic)'
+				PerMachine='yes' 
+				>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_HttpCompressionStatic"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-HttpCompressionStatic"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-HttpCompressionStatic"
+				InstallCondition='NOT HttpCompressionStatic'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_HttpCompressionDynamic"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-HttpCompressionDynamic"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-HttpCompressionDynamic"
+				InstallCondition='NOT HttpCompressionDynamic'
+				PerMachine='yes' 
+			>
+			</ExePackage>
+
+			<!--
+			#####
+			##### Management Tools
+			#####
+			-->
+
+			<ExePackage
+				Id="IIS_WebServerManagementTools"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-WebServerManagementTools"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-WebServerManagementTools"
+				InstallCondition='NOT WebServer OR NOT (ManagementConsole)'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_ManagementConsole"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ManagementConsole"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ManagementConsole"
+				InstallCondition='NOT ManagementConsole'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<!--<ExePackage
+				Id="IIS_ManagementScriptingTools"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ManagementScriptingTools"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ManagementScriptingTools"
+				InstallCondition='NOT ManagementScriptingTools'
+				PerMachine='yes'
+				>
+			</ExePackage>-->
+
+			<!--<ExePackage
+				Id="IIS_ManagementService"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: IIS-ManagementService"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:IIS-ManagementService"
+				InstallCondition='NOT ManagementService'
+				PerMachine='yes'
+				>
+			</ExePackage>-->
+
+			<!--
+			#####
+			##### IIS 6 Management Compatibility
+			#####
+			-->
+
+			<!-- NOTHING HERE FOR THIS INSTALLER -->
+
+
+			<!--
+			#####
+			##### FTP Publishing Service
+			#####
+			-->
+
+			<!-- NOTHING HERE FOR THIS INSTALLER -->
+
+			<!--
+			#####
+			##### Windows Process Activation Service
+			#####
+			-->
+			
+			<ExePackage
+				Id="IIS_WindowsActivationService"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: WAS-WindowsActivationService"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:WAS-WindowsActivationService"
+				InstallCondition='NOT WebServer OR NOT (ProcessModel OR NetFxEnvironment OR WASConfigurationAPI)'
+				PerMachine='yes'
+				>
+			</ExePackage>
+			
+			<ExePackage
+				Id="IIS_ProcessModel"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: WAS-ProcessModel"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:WAS-ProcessModel"
+				InstallCondition='NOT ProcessModel'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<ExePackage
+				Id="IIS_NetFxEnvironment"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: WAS-NetFxEnvironment"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:WAS-NetFxEnvironment"
+				InstallCondition='NOT NetFxEnvironment'
+				PerMachine='yes'
+				>
+			</ExePackage>
+
+			<ExePackage 
+				Id="IIS_ConfigurationAPI"
+				SourceFile="run.bat"
+				DisplayName="Installing IIS: WAS-WASConfigurationAPI"
+				InstallCommand="dism.exe /Online /Enable-Feature /FeatureName:WAS-ConfigurationAPI"
+				InstallCondition='NOT WASConfigurationAPI'
+				PerMachine='yes'
+				>
+			</ExePackage>
+		
+
+		</PackageGroup>
+	</Fragment>
+</Wix>

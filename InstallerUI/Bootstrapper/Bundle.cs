@@ -11,5 +11,8 @@ namespace InstallerUI.Bootstrapper
         public bool PerMachine;
         public string Name;
         public Package[] Packages;
-    }
+
+		// Custom table extension for license file
+		public string LicenseFileName;
+	}
 }

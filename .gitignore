@@ -16,3 +16,14 @@
 /InstallerUI/obj/Debug
 /Publish/MySQL
 /.vs/Bootstrapper/DesignTimeBuild
+/Bootstrapper/bin/Release/Bootstrapper.exe
+/Bootstrapper/bin/Release/Bootstrapper.wixpdb
+/Bootstrapper/obj/Release
+/CustomAction/bin/Release
+/CustomAction/obj/x86/Release
+/InstallerUI/bin/Release
+/InstallerUI/obj/Release
+/SetupProject1/bin/Release
+/SetupProject1/obj/Release
+/SetupProject2/bin/Release
+/SetupProject2/obj/Release

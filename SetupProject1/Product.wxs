@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="SetupProject1" Language="1033" Version="1.0.0.0" Manufacturer="CompanyName" UpgradeCode="6784dfa7-7b23-4cdc-b0d9-17159e38fd67">
+	<Product Id="*" Name="SetupProject1" Language="1033" Version="1.0.0.0" Manufacturer="CompanyName" UpgradeCode="3ea97885-8b68-4099-93f7-f6c281ef63b1">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />

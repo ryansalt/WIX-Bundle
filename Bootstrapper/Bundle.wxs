@@ -1,89 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" 
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
      xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-  
-     <Bundle Name="!(loc.BundleName)" Version="1.0.0.0" Manufacturer="!(loc.Manufacturer)" UpgradeCode="c4858e43-3e12-4e25-9ec9-d7b393705a16">
-		<!--<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />-->
-       <BootstrapperApplicationRef Id="ManagedBootstrapperApplicationHost">
-         <Payload Name="BootstrapperCore.config" SourceFile="$(var.InstallerUI.TargetDir)InstallerUI.BootstrapperCore.config" />
-         <Payload SourceFile="$(var.InstallerUI.TargetPath)" />
-         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Mvvm.dll" />
-         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Mvvm.Desktop.dll" />
-         <Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.SharedInterfaces.dll" />
-         <Payload SourceFile="$(var.InstallerUI.TargetDir)Newtonsoft.Json.dll" />
-       </BootstrapperApplicationRef>
 
-       <WixVariable Id="WixMbaPrereqLicenseUrl" Value="" />
-       <WixVariable Id="WixMbaPrereqPackageId" Value="" />
-       
-    <util:RegistrySearch Root="HKLM" 
-                         Key="SOFTWARE\Microsoft\ASP.NET Core\Runtime Package Store\v2.0" 
-                         Result="exists"
-                         Variable="NetCore2_x64_Installed"
-                         Win64="yes"
-                         />
+	<Bundle Name="!(loc.BundleName)" Version="1.0.0.0" Manufacturer="!(loc.Manufacturer)" UpgradeCode="cb364e19-9cd1-4de5-aef7-48d41bde0a4c">
 
-    <util:RegistrySearch Root="HKLM" 
-                         Key="SOFTWARE\Microsoft\ASP.NET Core\Runtime Package Store\v2.0" 
-                         Result="exists"
-                         Variable="NetCore2_x86_Installed" 
-                         />
-       
+		<!--<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense">
+			<Payload SourceFile="License.rtf" Compressed="yes" />
+			<bal:WixStandardBootstrapperApplication
+				SuppressOptionsUI="no"
+				ThemeFile="CustomTheme.xml"
+				LocalizationFile="Localization.wxl"
+				LicenseFile="License.rtf"
+				SuppressRepair="yes"
+				SuppressDowngradeFailure="yes">
+			</bal:WixStandardBootstrapperApplication>
+		</BootstrapperApplicationRef>-->
+
+		<BootstrapperApplicationRef Id="ManagedBootstrapperApplicationHost">
+			<Payload Name="BootstrapperCore.config" SourceFile="$(var.InstallerUI.TargetDir)InstallerUI.BootstrapperCore.config" />
+			<Payload SourceFile="$(var.InstallerUI.TargetPath)" />
+			<Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Mvvm.dll" />
+			<Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.Mvvm.Desktop.dll" />
+			<Payload SourceFile="$(var.InstallerUI.TargetDir)Microsoft.Practices.Prism.SharedInterfaces.dll" />
+			<Payload SourceFile="$(var.InstallerUI.TargetDir)Newtonsoft.Json.dll" />
+		</BootstrapperApplicationRef>
+
+		<WixVariable Id="WixMbaPrereqLicenseUrl" Value="Licence.txt" />
+
 		<Chain>
-      <PackageGroupRef Id='NetCore2_X64' />
-      <PackageGroupRef Id='NetCore2_X86' />
-      <RollbackBoundary />
-      <MsiPackage Id="SetupProject1"
-                  DisplayName="!(loc.SetupProject1)"
-                  SourceFile="$(var.SetupProject1.TargetPath)" 
-                  Visible="yes"
-                  DisplayInternalUI="yes">
-      </MsiPackage>
-      <MsiPackage Id="SetupProject2" 
-                  DisplayName="!(loc.SetupProject2)"
-                  SourceFile="$(var.SetupProject2.TargetPath)" 
-                  Visible="yes">
-      </MsiPackage>
-      <!-- It must be downloaded manually, it is not included in GIT -->
-      <MsiPackage SourceFile="$(var.SolutionDir)Publish\MySQL\mysql-installer-community-5.7.22.1.msi" 
-                  Id="MySQL" 
-                  DisplayName="!(loc.MySQLName)" 
-                  Cache="no" 
-                  DisplayInternalUI="no" 
-                  Visible="yes" 
-                  Permanent="no" />
+			<!-- This will install .Net 4.6.2 from the Web (built in to Wix) -->
+			<PackageGroupRef Id="NetFx462Web"/>
+			
+			<!-- This will install .Net 4.6.2 from the embedded installer using InstallNetFx.wxs-->
+			<!--
+			<PackageGroupRef Id='NetFx462Redist' />
+			-->
+			<!-- These will install .Net Core2.0 from an embedded installer using InstallNetFx.wxs -->
+			<!--
+			<PackageGroupRef Id='NetCore2_X64' />
+			<PackageGroupRef Id='NetCore2_X86' />
+			-->
+			<PackageGroupRef Id="InstallIIS" />
+
+			<RollbackBoundary />
+			<MsiPackage Id="SetupProject1"
+						DisplayName="!(loc.SetupProject1)"
+						SourceFile="$(var.SetupProject1.TargetPath)"
+						Visible="yes" 
+						DisplayInternalUI="yes">
+			</MsiPackage>
+			<MsiPackage Id="SetupProject2"
+						DisplayName="!(loc.SetupProject2)"
+						SourceFile="$(var.SetupProject2.TargetPath)"
+						Visible="yes">
+			</MsiPackage>
 		</Chain>
 	</Bundle>
 
-  <Fragment>
-    <!-- .Net core -->
-    <PackageGroup Id="NetCore2_X64">
-      <ExePackage Id="NetCore2_X64" 
-                  Cache="yes" 
-                  Compressed="yes" 
-                  PerMachine="yes" 
-                  Permanent="yes" 
-                  Vital="yes"
-                  InstallCondition="VersionNT64"
-                  InstallCommand="/s"
-                  UninstallCommand="/s /uninstall"
-                  SourceFile="$(var.SolutionDir)Publish\DotNet\dotnet-runtime-2.1.0-preview1-26216-03-win-x64.exe"
-                  DetectCondition="NetCore2_x64_Installed"  />
-    </PackageGroup>
 
-    <PackageGroup Id="NetCore2_X86">
-      <ExePackage Id="NetCore2_X86" 
-                  Cache="yes" 
-                  Compressed="yes" 
-                  PerMachine="yes" 
-                  Permanent="yes" 
-                  Vital="yes"
-                  InstallCondition="NOT VersionNT64"
-                  InstallCommand="/s"
-                  UninstallCommand="/s /uninstall"
-                  SourceFile="$(var.SolutionDir)Publish\DotNet\dotnet-runtime-2.1.0-preview1-26216-03-win-x86.exe"
-                  DetectCondition="NetCore2_x86_Installed" />
-    </PackageGroup>
-  </Fragment>
 </Wix>
